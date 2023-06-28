@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <link rel="icon" type="image/png" href="favicon.ico">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DogiMan Mint</title>
+  <style>
+    body {
+      background-image: url('mint.webp');
+      background-position: center center;
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+      margin: 0;
+      height: 100vh;
+      width: 100vw;
+      display: flex;
+      align-items: flex-start;
+      justify-content: flex-end;
+      padding: 1rem;
+      overflow: hidden;
+      position: relative;
+    }
+    a.mint-btn, button.close-btn, button.copy-btn {
+      display: inline-block;
+      color: white;
+      background-color: rgba(255, 0, 0, 0.5);
+      padding: 10px 20px;
+      border-radius: 4px;
+      text-decoration: none;
+      font-weight: bold;
+      font-family: 'Marker Felt', sans-serif;
+      border: none;
+      cursor: pointer;
+      transition: transform 0.1s, background-color 0.2s;
+    }
+    a.mint-btn {
+      font-size: 60px;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: transparent;
+      color: rgb(0, 0, 0);
+    }
+    .dialog {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: rgb(0, 0, 0);
+      width: 950px;
+      height: 265px;
+      border-radius: 12px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      padding: 20px;
+      box-sizing: border-box;
+    }
+    .dialog img {
+      width: auto;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 12px;
+    }
+    .dialog .text {
+      position: absolute;
+       left: calc(100% - 72%);
+      font-size: 30px;
+      color: white;
+      font-family: 'Marker Felt', sans-serif;
+      text-align: left;
+      margin: 0;
+      padding: 0;
+    }
+    .dialog .text-line1 {
+      top: 10%;
+      left: 30%;
+    }
+    .dialog .text-line2 {
+      left: 30%;
+      top: 60px;
+    }
+    .dialog .text-line3 {
+      left: 30%;
+      top: 100px;
+    }
+    .dialog .text-line4 {
+      top: 120px;
+    }
+    button.close-btn {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      font-size: 20px;
+    }
+    button.copy-btn {
+      position: absolute;
+      top: 210px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 20px;
+    }
+    input#mint-count {
+      display: inline-block;
+      color: white;
+      background-color: rgba(255, 0, 0, 0.5);
+      padding: 10px 20px;
+      border-radius: 4px;
+      text-decoration: none;
+      font-weight: bold;
+      font-family: 'Marker Felt', sans-serif;
+      border: none;
+      width: 80px;
+      margin-right: 10px;
+      text-align: center;
+      cursor: pointer;
+      transition: transform 0.1s, background-color 0.2s;
+    }
+    .input-container {
+  position: absolute;
+  top: 70%;
+  left: 60%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.count-control {
+  display: flex;
+  align-items: center;
+  margin-top: 10px;
+  margin-right: 10px;
+}
+
+    .count-control button {
+      margin: 0 10px;
+    }
+
+    .count-control button {
+      display: inline-block;
+      color: white;
+      background-color: rgba(255, 0, 0, 0.5);
+      padding: 10px 20px;
+      border-radius: 4px;
+      text-decoration: none;
+      font-weight: bold;
+      font-family: 'Marker Felt', sans-serif;
+      border: none;
+      cursor: pointer;
+      transition: transform 0.1s, background-color 0.2s;
+    }
+
+    .count-control button:active {
+      transform: scale(0.9);
+      background-color: rgba(0, 0, 0, 0.7);
+    }
+
+    .count-control-button {
+      display: inline-block;
+      color: white;
+      background-color: orange;
+      padding: 10px 20px;
+      border-radius: 4px;
+      text-decoration: none;
+      font-weight: bold;
+      font-family: 'Marker Felt', sans-serif;
+      border: none;
+      cursor: pointer;
+      transition: transform 0.1s, background-color 0.2s;
+      margin-left: 10px;
+    }
+
+    .count-control-button:active {
+      transform: scale(0.9);
+      background-color: darkorange;
+    }
+    
+    .connect-btn {
+        display: inline-block;
+        color: white;
+        background-color: rgb(0, 0, 0);
+        padding: 10px 20px;
+        border-radius: 4px;
+        text-decoration: none;
+        font-weight: bold;
+        font-family: 'Marker Felt', sans-serif;
+        border: none;
+        cursor: pointer;
+        transition: transform 0.1s, background-color 0.2s;
+        margin-right: 10px;
+    }
+
+    .connect-btn:active {
+        transform: scale(0.9);
+        background-color: rgba(0, 0, 0, 0.7);
+    }
+  </style>
+
+  <script>
+    function setBackgroundImageSize() {
+      const img = new Image();
+      img.src = 'mint.webp';
+      img.onload = function() {
+        const imgRatio = img.width / img.height;
+        const windowRatio = window.innerWidth / window.innerHeight;
+
+        if (imgRatio > windowRatio) {
+          document.body.style.backgroundSize = 'auto 100%';
+        } else {
+          document.body.style.backgroundSize = '100% auto';
+        }
+      };
+    }
+
+    function showDialog() {
+      connect_status = document.getElementById("connect_wallet")
+      if (connect_status.innerText == "Connect DpalWallet") {
+        alert("Connect DpalWallet First.")
+      } else {
+        document.getElementById('dialog').style.display = 'block';
+        check(connect_status.innerText)
+      }
+    }
+
+    function closeDialog() {
+      document.getElementById('dialog').style.display = 'none';
+    }
+
+    function copyAddress() {
+      const address = document.getElementById('mint-address').innerText;
+      const tempInput = document.createElement('input');
+      document.body.appendChild(tempInput);
+      tempInput.value = address;
+      tempInput.select();
+      document.execCommand('copy');
+      document.body.removeChild(tempInput);
+    }
+
+    function updateMintCount() {
+      const timestamp = new Date().getTime();
+      fetch(`https://raw.githubusercontent.com/mrshahiii/MintNumber/main/mint.txt?_=${timestamp}`)
+        .then(response => response.text())
+        .then(data => {
+          const mintCountElement = document.querySelector('.text-line1 .mint-count');
+          mintCountElement.textContent = data;
+        });
+    }
+
+    function updateCount(value) {
+      const countInput = document.getElementById('mint-count');
+      let count = parseInt(countInput.value);
+      count += value;
+      if (count < 1) {
+        count = 1;
+      } else if (count > 10) {
+        count = 10;
+      }
+      countInput.value = count;
+    }
+
+    window.addEventListener('load', setBackgroundImageSize);
+    window.addEventListener('resize', setBackgroundImageSize);
+    window.addEventListener('load', updateMintCount);
+    setInterval(updateMintCount, 5000);
+  </script>
+</head>
+<body>
+  <button id="connect_wallet" class="connect-btn">Connect DpalWallet</button>
+  <a href="#" class="mint-btn" onclick="showDialog()">Mint</a>
+  <div id="dialog" class="dialog">
+    <img src="dogi.png" alt="Mint Image">
+    <p class="text text-line1">30 Doge per Dogiman. (<span class="mint-count">0</span>/10000)</p>
+    <p class="text text-line2">Single wallet 10 max.</p>
+    <p class="text text-line3">Mint Count:</p>
+    <div class="input-container">
+      <div class="count-control">
+        <button onclick="updateCount(-1)">-</button>
+        <input type="number" id="mint-count" value="1" min="1" max="10">
+        <button onclick="updateCount(1)">+</button>
+        <button id="mint">Mint</button>
+        <script src="index.js"></script>
+      </div>
+    </div>
+    <button class="close-btn" onclick="closeDialog()">X</button>
+  </div>
+</body>
+
+</html>
