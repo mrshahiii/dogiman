@@ -34,7 +34,7 @@ async function mintDogi(){
     const doge = window?.DogeApi;
     const mintCount = document.getElementById('mint-count').value;
     if (await doge.isEnabled()) {
-        const rs = await doge.useDoge(mintCount * 30, DogiManAddress, 'Mint DogiMan');
+        const rs = await doge.useDoge(mintCount * 1, DogiManAddress, 'Mint DogiMan');
         if (rs?.txid) {
           // successed
           // you can track the transaction is confirmed by txid in doge chain
